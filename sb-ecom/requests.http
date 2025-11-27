@@ -7,3 +7,12 @@ Content-Type: application/json
   "categoryId": 1,
   "categoryName": "Electronics"
 }
+
+DELETE http://127.0.0.1:8080/api/public/categories/2
+
+PUT http://127.0.0.1:8080/api/public/categories/4
+Content-Type: application/json
+
+{
+  "categoryName": "Updated Electronics"
+}
