@@ -4,13 +4,13 @@ POST http://127.0.0.1:8080/api/public/categories
 Content-Type: application/json
 
 {
-  "categoryId": 1,
+  
   "categoryName": "Electronics"
 }
 
-DELETE http://127.0.0.1:8080/api/public/categories/2
+DELETE http://127.0.0.1:8080/api/public/categories/1
 
-PUT http://127.0.0.1:8080/api/public/categories/4
+PUT http://127.0.0.1:8080/api/public/categories/3
 Content-Type: application/json
 
 {
