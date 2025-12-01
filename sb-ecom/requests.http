@@ -5,12 +5,12 @@ Content-Type: application/json
 
 {
   
-  "categoryName": "Electronics"
+  "categoryName": "travel"
 }
 
 DELETE http://127.0.0.1:8080/api/public/categories/1
 
-PUT http://127.0.0.1:8080/api/public/categories/3
+PUT http://127.0.0.1:8080/api/public/categories/1
 Content-Type: application/json
 
 {
