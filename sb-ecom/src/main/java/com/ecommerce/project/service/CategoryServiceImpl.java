@@ -2,7 +2,10 @@ package com.ecommerce.project.service;
 
 
 import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,16 +26,40 @@ public class CategoryServiceImpl implements CategoryService {
     private ModelMapper modelMapper;
 
     @Override
-    public CategoryResponse getAllCategories() {
+    public CategoryResponse bulkInsert(List<CategoryDTO> categories) {
+        List<Category> categoryList= categories.stream()
+        .map(categoryDTO -> modelMapper.map(categoryDTO, Category.class)).toList();
+        List<Category> savedCategories= categoryRepository.saveAll(categoryList);
+        List<CategoryDTO> categoryDTOs=savedCategories.stream()
+        .map(category -> modelMapper.map(category, CategoryDTO.class)).toList();
+        CategoryResponse categoryResponse=new CategoryResponse();
+        categoryResponse.setCategories(categoryDTOs);
+        return categoryResponse;
+    }
+
+    @Override
+    public CategoryResponse getAllCategories(int pageNo, int pageSize,String sortBy,String sortOrder) {
 
         if(categoryRepository.findAll().isEmpty()){
             throw new APIException("No categories found");
         }
-        List<CategoryDTO> categoryDTOs= categoryRepository.findAll().stream()
+        Sort sortByAndOrder=sortOrder.equalsIgnoreCase("asc")
+            ?Sort.by(sortBy).ascending()
+            :Sort.by(sortBy).descending();
+        Pageable pageable=PageRequest.of(pageNo, pageSize, sortByAndOrder);
+        Page<Category> categoriesPage= categoryRepository.findAll(pageable);
+        List<Category> categories=categoriesPage.getContent();
+        
+        List<CategoryDTO> categoryDTOs= categories.stream()
         .map(category -> modelMapper.map(category, CategoryDTO.class)).toList();
 
         CategoryResponse categoryResponse=new CategoryResponse();
         categoryResponse.setCategories(categoryDTOs);
+        categoryResponse.setPageNo(categoriesPage.getNumber());
+        categoryResponse.setPageSize(categoriesPage.getSize());
+        categoryResponse.setTotalElements(categoriesPage.getTotalElements());
+        categoryResponse.setTotalPages(categoriesPage.getTotalPages());
+        categoryResponse.setLastPage(categoriesPage.isLast());
        
         return categoryResponse;
     }

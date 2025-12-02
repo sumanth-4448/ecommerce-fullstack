@@ -1,4 +1,40 @@
-GET http://127.0.0.1:8080/api/public/categories
+GET http://127.0.0.1:8080/api/public/categories?pageNo=01&pageSize=5&sortBy=categoryId&sortOrder=desc
+
+POST http://127.0.0.1:8080/api/public/categories/bulkInsert
+Content-Type: application/json
+
+[
+    { "categoryName": "fashion" },
+    { "categoryName": "books" },
+    { "categoryName": "sports" },
+    { "categoryName": "electronics" },
+    { "categoryName": "home" },
+    { "categoryName": "kitchen" },
+    { "categoryName": "toys" },
+    { "categoryName": "beauty" },
+    { "categoryName": "health" },
+    { "categoryName": "grocery" },
+    { "categoryName": "automotive" },
+    { "categoryName": "music" },
+    { "categoryName": "movies" },
+    { "categoryName": "gaming" },
+    { "categoryName": "garden" },
+    { "categoryName": "pets" },
+    { "categoryName": "baby" },
+    { "categoryName": "office" },
+    { "categoryName": "stationery" },
+    { "categoryName": "footwear" },
+    { "categoryName": "jewelry" },
+    { "categoryName": "watches" },
+    { "categoryName": "travel" },
+    { "categoryName": "fitness" },
+    { "categoryName": "outdoors" },
+    { "categoryName": "hardware" },
+    { "categoryName": "furniture" },
+    { "categoryName": "lighting" },
+    { "categoryName": "cleaning" },
+    { "categoryName": "artist" }
+]
 
 POST http://127.0.0.1:8080/api/public/categories
 Content-Type: application/json
