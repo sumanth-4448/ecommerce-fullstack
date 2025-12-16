@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,14 +29,17 @@ public class Product {
 
     
     private Integer quantity;
-    
-    @NotBlank
+
+    @NotNull
     private Double price;
     private Double discount;
     private Double specialPrice;
 
     @ManyToOne
-    @JoinColumn(name="categoryId", nullable=false)
+    @JoinColumn(name="category_id", nullable=false)
     private Category category;
 
+    @ManyToOne
+    @JoinColumn(name="seller_id")
+    private User user;
 }

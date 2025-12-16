@@ -1,11 +1,7 @@
 package com.ecommerce.project.service;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +68,7 @@ public class ProductServiceImpl implements ProductService {
         Sort sortByAndOrder=sortOrder.equalsIgnoreCase("asc")
             ?Sort.by(sortBy).ascending()
             :Sort.by(sortBy).descending();
+
         Pageable pageable=PageRequest.of(pageNo, pageSize, sortByAndOrder);
         Page<Product> productsPage= productRepository.findAll(pageable);
         List<Product> products=productsPage.getContent();
@@ -92,12 +89,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse getProductsByCategory(Long categoryId) {
+    public ProductResponse getProductsByCategory(Long categoryId, int pageNo, int pageSize, String sortBy, String sortOrder) {
        
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
         
-        List<Product> products= productRepository.findByCategoryOrderByPriceAsc(category);
+        Sort sortByAndOrder=sortOrder.equalsIgnoreCase("asc")
+            ?Sort.by(sortBy).ascending()
+            :Sort.by(sortBy).descending();
+
+        Pageable pageable=PageRequest.of(pageNo, pageSize, sortByAndOrder);
+        
+        Page<Product> products = productRepository.findByCategoryOrderByPriceAsc(category,pageable);
+        
         if(products.isEmpty()){
             throw new APIException("No products found in category "+category.getCategoryName());
         }
@@ -107,6 +111,13 @@ public class ProductServiceImpl implements ProductService {
         
         ProductResponse productResponse=new ProductResponse();
         productResponse.setProducts(productDTOs);
+        productResponse.setPageNo(pageNo);
+        productResponse.setPageSize(pageSize);
+        productResponse.setTotalElements(products.getTotalElements());
+        productResponse.setTotalPages(products.getTotalPages());
+        productResponse.setLastPage(products.isLast());
+
+
 
         return productResponse;
 
