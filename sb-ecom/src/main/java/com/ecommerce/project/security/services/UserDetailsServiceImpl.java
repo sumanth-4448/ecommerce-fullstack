@@ -8,7 +8,9 @@ import com.ecommerce.project.repositories.UserRepository;
 import com.ecommerce.project.model.User;
 
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
