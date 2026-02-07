@@ -4,7 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.jspecify.annotations.Nullable;
+
+import jakarta.annotation.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -64,6 +65,22 @@ public class UserDetailsImpl   implements UserDetails {
     public String getUsername() {
         return username;
     }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
     @Override
     public boolean equals(@Nullable Object o) {
         if (this == o)
@@ -73,5 +90,8 @@ public class UserDetailsImpl   implements UserDetails {
         UserDetailsImpl user = (UserDetailsImpl) o;
         return java.util.Objects.equals(id, user.id);
     }
-
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
