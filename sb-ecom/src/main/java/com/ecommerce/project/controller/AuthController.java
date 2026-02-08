@@ -24,10 +24,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -137,5 +134,32 @@ public class AuthController {
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("user registered successfully"));
     }
+
+    @GetMapping("/user")
+    public ResponseEntity<?> getUserDetails(Authentication authentication){
+
+            if(authentication==null || !authentication.isAuthenticated())
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("unauthorized");
+
+        UserDetailsImpl userDetails=(UserDetailsImpl) authentication.getPrincipal();
+        List<String> roles=userDetails.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .toList();
+            UserInfoResponse response=new UserInfoResponse(userDetails.getId(), userDetails.getUsername(), roles);
+
+            return ResponseEntity.ok().body(response);
+
+
+    }
+
+    @PostMapping("/signout")
+    public ResponseEntity<?> signoutUser(){
+            ResponseCookie cookie=jwtUtils.getCleanJwtFromCookie();
+            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,
+                        cookie.toString())
+                    .body(new MessageResponse("you have been signed out!"));
+    }
+
 
 }
