@@ -13,11 +13,11 @@ import com.ecommerce.project.model.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    Page<Product> findByCategoryOrderByPriceAsc(Category category,Pageable pageable);
 
     List<Product> findByProductNameContainingIgnoreCase(String keyword);
 
     List<Product> findByCategoryCategoryId(Long categoryId);
 
 
+    Page<Product> findByCategory(Category category, Pageable pageable);
 }
